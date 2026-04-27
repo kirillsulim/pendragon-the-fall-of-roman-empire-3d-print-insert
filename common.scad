@@ -42,6 +42,12 @@ function append_each(array_of_vectors, add_vector) =
     echo(array_of_vectors)
     map(array_of_vectors, function(i) vecsum(i, add_vector));
     
+    
+function contains(array, value) = 
+    echo("contains")
+    echo(search(value, array))
+    len(search(value, array)) != 0;
+    
 
 function lid(text = "", font = "", lbl_size = AUTO, angle = 0, lid_rad = 6) = 
     let (lid_pattern_n = 6)
