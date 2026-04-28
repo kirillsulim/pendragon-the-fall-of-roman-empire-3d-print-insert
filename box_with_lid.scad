@@ -270,20 +270,21 @@ prosp_box = [ OBJECT_BOX,
     [ BOX_SIZE_XYZ, prosp_box_size ],
     [ CHAMFER_N, 1 ],
     [ BOX_STACKABLE_B, false ],
-    comp8(prosp_box_size, prosp_cmp, 0, [prosp_cmp[0]], 0, label = roman_label("Prosperity")),
+    comp8(prosp_box_size, prosp_cmp, 0, [prosp_cmp[0]], 0, label = rom_label("Prosperity")),
     render_lids ? lid("Prosperity", roman_font, AUTO, 0, 4) : no_lid(),
 ];
 
 tok_box_size = [factions_stack, box_width - faction_width_up, faction_height - lid_down_space];
 tok_cmp_y_max = tok_box_size.y - 2 * ext_walls - inner_chamfer_add_vector.y;
 tok_cmp_pure = [
+  [22, tok_cmp_y_max, faction_depth],
+  [22, tok_cmp_y_max, faction_depth],
   [40, tok_cmp_y_max, faction_depth],
-  [25, tok_cmp_y_max, faction_depth],
-  [40, tok_cmp_y_max, faction_depth],
-  [50, tok_cmp_y_max, faction_depth],
+  [10, tok_cmp_y_max, faction_depth],
+  [10, tok_cmp_y_max, faction_depth],
 ];
 tok_cmp_chamferred = append_each(tok_cmp_pure, inner_chamfer_add_vector);
-tok_cmp = extend_cmp_x(tok_box_size, tok_cmp_chamferred, [3]);
+tok_cmp = extend_cmp_x(tok_box_size, tok_cmp_chamferred, []);
 
 tok_box = [ OBJECT_BOX,
     [ BOX_SIZE_XYZ, tok_box_size ],
@@ -292,7 +293,8 @@ tok_box = [ OBJECT_BOX,
     comp8(tok_box_size, tok_cmp, 0, label = rom_label("Pop 0-1", 5)),
     comp8(tok_box_size, tok_cmp, 1, label = rom_label("Pop 2-4", 5)),
     comp8(tok_box_size, tok_cmp, 2, label = rom_label("Foederati", 5)),
-    comp8(tok_box_size, tok_cmp, 3, label = rom_label("Other", 5)),
+    comp8(tok_box_size, tok_cmp, 3, label = rom_label("Sail", 5)),
+    comp8(tok_box_size, tok_cmp, 4, label = rom_label("Ref", 5)),
     render_lids ? lid("Markers", roman_font, AUTO, 0, 4) : no_lid(),
 ];
 
@@ -306,19 +308,19 @@ cubes_box = [ OBJECT_BOX,
     [ BOX_STACKABLE_B, false ],
     comp8(cubes_box_size, cubes_cmp, 0, [cubes_cmp[0], cubes_cmp_2[0]], 0, label = rom_label("Cubes", 8)),
     comp8(cubes_box_size, cubes_cmp_2, 0, [cubes_cmp[0], cubes_cmp_2[0]], 1, label = rom_label("Pawns", 8)),
-    lid("ignore"),
+    no_lid(),
 ];
 
 control_box_size = [cubes_box_size.x, cubes_box_size.y, cards_box_size.z - cubes_box_height - lid_down_space - 1];
-control_cmp = extend_cmp_x(control_box_size, [[10, 64, control_box_size - 2]], [0]);
-control_cmp_2 = extend_cmp_x(control_box_size, [[10, 24, control_box_size - 2]], [0]);
+control_cmp = extend_cmp_x(control_box_size, [[10, 64, control_box_size.z - 3]], [0]);
+control_cmp_2 = extend_cmp_x(control_box_size, [[10, 24, control_box_size.z - 3]], [0]);
 control_box = [ OBJECT_BOX,
     [ BOX_SIZE_XYZ, control_box_size ],
     [ CHAMFER_N, 1 ],
-    [ BOX_STACKABLE_B, true ],
+    [ BOX_STACKABLE_B, false],
     comp8(control_box_size, control_cmp, 0, [control_cmp[0], control_cmp_2[0]], 0, label = rom_label("Control", 8)),
     comp8(control_box_size, control_cmp_2, 0, [control_cmp[0], control_cmp_2[0]], 1, label = rom_label("Start", 8)),
-    render_lids ? lid("Start & Control", roman_font, AUTO, 90, 4) : no_lid(),
+    render_lids ? lid("Start & Control", roman_font, 8, 90, 4) : no_lid(),
 ];
 
 data = [
@@ -327,10 +329,10 @@ data = [
     //civ_box,
     //sax_box,
     //sco_box,
-    //prosp_box,
+    prosp_box,
     //tok_box,
     //cubes_box,
-    control_box,
+    //control_box,
 ];
 
 Make(data);
