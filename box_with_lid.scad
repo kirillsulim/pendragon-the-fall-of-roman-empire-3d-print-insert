@@ -15,6 +15,7 @@ sax_font = "Gaeilge";
 
 profiles = "labels lids";
 //profiles = "labels";
+//profiles = "lids";
 //profiles = "";
 
 labels = contains(profiles, "labels");
@@ -83,12 +84,13 @@ function extend_cmp_x(box_size, cmp_arr, index_arr) =
             vecsum(cmp_arr[i], [addition , 0, 0])
     ];
     
-function rom_label(text = "", size = AUTO) = 
+function rom_label(text = "", size = AUTO, angle = 0) = 
     [ LABEL, 
         [ ENABLED_B, labels ],
         [ LBL_TEXT, [[ text ]]],
         [ LBL_SIZE, size ],
         [ LBL_FONT, roman_font ],
+        [ ROTATION, angle ],
     ];
     
 function sax_label(text = "", size = AUTO) = 
@@ -123,7 +125,7 @@ cards_box = [ OBJECT_BOX,
 
 faction_depth = 14;
 faction_height = (box_height - rules) / 2;
-faction_width_bottom = box_width - 35; // box_length - cards_box_size.y;
+faction_width_bottom = box_width - 35;
 faction_width_up = faction_width_bottom - 10;
 factions_stack = box_length - cards_box_size.y;
 
@@ -216,11 +218,11 @@ sax_box = [ OBJECT_BOX,
     [ BOX_SIZE_XYZ, sax_box_size ],
     [ CHAMFER_N, 1 ],
     [ BOX_STACKABLE_B, false ],
-    comp8(sax_box_size, sax_cmp, 0, [sax_cmp[0], sax_cmp_2[0]], 0, label = sax_label("25 Raiders")),
-    comp8(sax_box_size, sax_cmp, 1, [sax_cmp[1], sax_cmp_2[0]], 0, label = sax_label("25 Warbands")),
-    comp8(sax_box_size, sax_cmp, 2, [sax_cmp[2], sax_cmp_2[1]], 0, label = sax_label("Misc")),
-    comp8(sax_box_size, sax_cmp_2, 0, [sax_cmp[0], sax_cmp_2[0]], 1, label = sax_label("12 Settlements")),
-    comp8(sax_box_size, sax_cmp_2, 1, [sax_cmp[2], sax_cmp_2[1]], 1, label = sax_label("Misc")),
+    comp8(sax_box_size, sax_cmp, 0, [sax_cmp[0], sax_cmp_2[0]], 0, label = sax_label("25 Raiders", 6)),
+    comp8(sax_box_size, sax_cmp, 1, [sax_cmp[1], sax_cmp_2[0]], 0, label = sax_label("25 Warbands", 6)),
+    comp8(sax_box_size, sax_cmp, 2, [sax_cmp[2], sax_cmp_2[1]], 0, label = sax_label("Misc", 6)),
+    comp8(sax_box_size, sax_cmp_2, 0, [sax_cmp[0], sax_cmp_2[0]], 1, label = sax_label("12 Settlements", 6)),
+    comp8(sax_box_size, sax_cmp_2, 1, [sax_cmp[2], sax_cmp_2[1]], 1, label = sax_label("Misc", 6)),
     render_lids ? lid("Saxons", sax_font, AUTO, 0, 4) : no_lid(),
 ];
 
@@ -250,31 +252,18 @@ sco_box = [ OBJECT_BOX,
     [ BOX_SIZE_XYZ, sco_box_size ],
     [ CHAMFER_N, 1 ],
     [ BOX_STACKABLE_B, false ],
-    comp8(sco_box_size, sco_cmp, 0, [sco_cmp[0]], 0, label = sax_label("30 Raiders")),
-    comp8(sco_box_size, sco_cmp, 1, [sco_cmp[1], sco_cmp_2[1]], 0, label = sax_label("30 Warbands")),
-    comp8(sco_box_size, sco_cmp, 2, [sco_cmp[2], sco_cmp_2[2]], 0, label = sax_label("Misc")),
-    comp8(sco_box_size, sco_cmp_2, 1, [sco_cmp[1], sco_cmp_2[1]], 1, label = sax_label("6 Settlements")),
-    comp8(sco_box_size, sco_cmp_2, 2, [sco_cmp[2], sco_cmp_2[2]], 1, label = sax_label("Misc")),
+    comp8(sco_box_size, sco_cmp, 0, [sco_cmp[0]], 0, label = sax_label("30 Raiders", 6)),
+    comp8(sco_box_size, sco_cmp, 1, [sco_cmp[1], sco_cmp_2[1]], 0, label = sax_label("30 Warbands", 5)),
+    comp8(sco_box_size, sco_cmp, 2, [sco_cmp[2], sco_cmp_2[2]], 0, label = sax_label("Misc", 6)),
+    comp8(sco_box_size, sco_cmp_2, 1, [sco_cmp[1], sco_cmp_2[1]], 1, label = sax_label("6 Settlements", 5)),
+    comp8(sco_box_size, sco_cmp_2, 2, [sco_cmp[2], sco_cmp_2[2]], 1, label = sax_label("Misc", 6)),
     render_lids ? lid("Scotti", sax_font, AUTO, 0, 4) : no_lid(),
 ];
 
 
-prosp_box_size = [factions_stack / 2, box_width - faction_width_bottom, faction_height - lid_down_space];
-prosp_cmp_pure = [
-    [80, prosp_box_size.y - 2 * ext_walls - inner_chamfer_add_vector.y, faction_depth]
-];
-prosp_cmp_chamferred = append_each(prosp_cmp_pure, inner_chamfer_add_vector);
-prosp_cmp = extend_cmp_x(prosp_box_size, prosp_cmp_chamferred, [0]);
 
-prosp_box = [ OBJECT_BOX,
-    [ BOX_SIZE_XYZ, prosp_box_size ],
-    [ CHAMFER_N, 1 ],
-    [ BOX_STACKABLE_B, false ],
-    comp8(prosp_box_size, prosp_cmp, 0, [prosp_cmp[0]], 0, label = rom_label("Prosperity")),
-    render_lids ? lid("Prosperity", roman_font, AUTO, 0, 4) : no_lid(),
-];
-
-tok_box_size = [factions_stack, box_width - faction_width_up, faction_height - lid_down_space];
+swift = 40;
+tok_box_size = [factions_stack - swift, box_width - faction_width_up, faction_height - lid_down_space];
 tok_cmp_y_max = tok_box_size.y - 2 * ext_walls - inner_chamfer_add_vector.y;
 tok_cmp_pure = [
   [22, tok_cmp_y_max, faction_depth],
@@ -284,43 +273,95 @@ tok_cmp_pure = [
   [10, tok_cmp_y_max, faction_depth],
 ];
 tok_cmp_chamferred = append_each(tok_cmp_pure, inner_chamfer_add_vector);
-tok_cmp = extend_cmp_x(tok_box_size, tok_cmp_chamferred, []);
+tok_cmp = extend_cmp_x(tok_box_size, tok_cmp_chamferred, [4]);
 
 tok_box = [ OBJECT_BOX,
     [ BOX_SIZE_XYZ, tok_box_size ],
     [ CHAMFER_N, 1 ],
     [ BOX_STACKABLE_B, false ],
-    comp8(tok_box_size, tok_cmp, 0, label = rom_label("Pop 0-1", 5)),
-    comp8(tok_box_size, tok_cmp, 1, label = rom_label("Pop 2-4", 5)),
-    comp8(tok_box_size, tok_cmp, 2, label = rom_label("Foederati", 5)),
-    comp8(tok_box_size, tok_cmp, 3, label = rom_label("Sail", 5)),
-    comp8(tok_box_size, tok_cmp, 4, label = rom_label("Ref", 5)),
+    comp8(tok_box_size, tok_cmp, 0, label = rom_label("Pop. 0-1", 5, angle = 90)),
+    comp8(tok_box_size, tok_cmp, 1, label = rom_label("Pop. 2-4", 5, angle = 90)),
+    comp8(tok_box_size, tok_cmp, 2, label = rom_label("Foederati", 5, angle = 45)),
+    comp8(tok_box_size, tok_cmp, 3, label = rom_label("Sail", 5, angle = 90)),
+    comp8(tok_box_size, tok_cmp, 4, label = rom_label("Ref.", 5, angle = 90)),
     render_lids ? lid("Markers", roman_font, AUTO, 0, 4) : no_lid(),
 ];
 
-cubes_box_height = 20;
-cubes_box_size = [box_width - 2 * cards_box_size.x, cards_box_size.y, cubes_box_height];
-cubes_cmp = extend_cmp_x(cubes_box_size, [[10, 46, 18]], [0]);
-cubes_cmp_2 = extend_cmp_x(cubes_box_size, [[10, 45, 18]], [0]);
+start_box_size = [swift, box_width - faction_width_up, faction_height - lid_down_space];
+start_cmp = extend_cmp_x(start_box_size, [[10, start_box_size.y - 2 * ext_walls, faction_depth]], [0]);
+start_box = [ OBJECT_BOX,
+    [ BOX_SIZE_XYZ, start_box_size ],
+    [ CHAMFER_N, 1 ],
+    [ BOX_STACKABLE_B, false ],
+    comp8(start_box_size, start_cmp, 0, label = rom_label("Start", 5, angle = 45)),
+    render_lids ? lid("Start", roman_font, AUTO, 0, 4) : no_lid(),
+];
+
+cubes_box_size = [67 + 2 * ext_walls, box_width - faction_width_bottom, faction_height];
+cubes_cmp = [cubes_box_size.x - 2 * ext_walls, cubes_box_size.y - 2 * ext_walls, cubes_box_size.z - 2];
+
 cubes_box = [ OBJECT_BOX,
     [ BOX_SIZE_XYZ, cubes_box_size ],
     [ CHAMFER_N, 1 ],
     [ BOX_STACKABLE_B, false ],
-    comp8(cubes_box_size, cubes_cmp, 0, [cubes_cmp[0], cubes_cmp_2[0]], 0, label = rom_label("Cubes", 8)),
-    comp8(cubes_box_size, cubes_cmp_2, 0, [cubes_cmp[0], cubes_cmp_2[0]], 1, label = rom_label("Pawns", 8)),
+    [ BOX_FEATURE,
+        [ FTR_SHAPE, SQUARE ],    
+        [ CHAMFER_N, 0.4],
+        [ FTR_COMPARTMENT_SIZE_XYZ, cubes_cmp],
+        rom_label("Dice", 8)
+    ],
     no_lid(),
 ];
 
-control_box_size = [cubes_box_size.x, cubes_box_size.y, cards_box_size.z - cubes_box_height - lid_down_space - 1];
-control_cmp = extend_cmp_x(control_box_size, [[10, 64, control_box_size.z - 3]], [0]);
-control_cmp_2 = extend_cmp_x(control_box_size, [[10, 24, control_box_size.z - 3]], [0]);
+prosp_box_size = [box_width - 2 * cards_box_size.x, cards_box_size.y, faction_height - lid_down_space];
+prosp_cmp_pure = [
+    [30, prosp_box_size.y - 2 * ext_walls - inner_chamfer_add_vector.y, faction_depth]
+];
+prosp_cmp_chamferred = append_each(prosp_cmp_pure, inner_chamfer_add_vector);
+prosp_cmp = extend_cmp_x(prosp_box_size, prosp_cmp_chamferred, [0]);
+
+prosp_box = [ OBJECT_BOX,
+    [ BOX_SIZE_XYZ, prosp_box_size ],
+    [ CHAMFER_N, 1 ],
+    [ BOX_STACKABLE_B, false ],
+    comp8(prosp_box_size, prosp_cmp, 0, [prosp_cmp[0]], 0, label = rom_label("Prosperity")),
+    render_lids ? lid("Prosperity", roman_font, AUTO, 90, 4) : no_lid(),
+];
+
+control_box_size = [prosp_box_size.x, prosp_box_size.y, faction_height - lid_down_space];
+control_cmp = extend_cmp_x(control_box_size, [[10, 46, control_box_size.z - 3]], [0]);
+control_cmp_2 = extend_cmp_x(control_box_size, [[10, 46, control_box_size.z - 3]], [0]);
 control_box = [ OBJECT_BOX,
     [ BOX_SIZE_XYZ, control_box_size ],
     [ CHAMFER_N, 1 ],
     [ BOX_STACKABLE_B, false],
     comp8(control_box_size, control_cmp, 0, [control_cmp[0], control_cmp_2[0]], 0, label = rom_label("Control", 8)),
-    comp8(control_box_size, control_cmp_2, 0, [control_cmp[0], control_cmp_2[0]], 1, label = rom_label("Start", 8)),
-    render_lids ? lid("Start & Control", roman_font, 8, 90, 4) : no_lid(),
+    comp8(control_box_size, control_cmp_2, 0, [control_cmp[0], control_cmp_2[0]], 1, label = rom_label("Pawns", 8)),
+    render_lids ? lid("Pawns & Control", roman_font, 6, 90, 4) : no_lid(),
+];
+
+spare_box_size = [factions_stack - cubes_box_size.x, box_width - faction_width_bottom, faction_height - lid_down_space];
+spare_cmp = vecsum(spare_box_size, [- 2 * ext_walls, - 2 * ext_walls, - ext_walls]);
+
+spare_box = [ OBJECT_BOX,
+    [ BOX_SIZE_XYZ, spare_box_size ],
+    [ CHAMFER_N, 1 ],
+    [ BOX_STACKABLE_B, false ],
+    [ BOX_FEATURE,
+        [ FTR_SHAPE, SQUARE ],    
+        [ CHAMFER_N, 0.4],
+        [ FTR_COMPARTMENT_SIZE_XYZ, spare_cmp],
+    ],
+    render_lids ? lid("Spare", roman_font, 14, 0, 4) : no_lid(),
+];
+
+divider = [ OBJECT_DIVIDERS,
+    [ DIV_TAB_TEXT, [""] ],
+    [ DIV_FRAME_NUM_COLUMNS, 2 ],
+    [ DIV_FRAME_SIZE_XY, GMT_CARD],
+    [ DIV_TAB_SIZE_XY, [30, 3] ],
+    [ DIV_TAB_CYCLE, 3],
+    [DIV_TAB_CYCLE_START, 2],
 ];
 
 data = [
@@ -329,10 +370,13 @@ data = [
     //civ_box,
     //sax_box,
     //sco_box,
-    prosp_box,
     //tok_box,
+    //start_box,
     //cubes_box,
+    //prosp_box,
     //control_box,
+    //spare_box,
+    divider,
 ];
 
 Make(data);
